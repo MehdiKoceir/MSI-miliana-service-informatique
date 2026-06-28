@@ -15,10 +15,13 @@ import {
 
 // STORES
 import { useCartStore } from './store/cart';
+import { useThemeStore } from './store/theme';
+import { isSupabaseConfigured } from './lib/supabase';
 
 // COMPONENTS
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import WhatsAppWidget from './components/WhatsAppWidget';
 
 // PUBLIC PAGES
 import Home from './pages/Home';
@@ -28,6 +31,7 @@ import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import Confirmation from './pages/Confirmation';
 import About from './pages/About';
+import Wishlist from './pages/Wishlist';
 
 // ADMIN PAGES
 import Login from './pages/admin/Login';
@@ -42,6 +46,17 @@ import SettingsPage from './pages/admin/Settings';
 import { Product, Category, StoreSettings } from './types/store';
 
 export default function App() {
+  const theme = useThemeStore((state) => state.theme);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light-theme');
+    } else {
+      root.classList.remove('light-theme');
+    }
+  }, [theme]);
+
   // NAVIGATION TABS
   const [currentTab, setCurrentTab] = useState<string>('accueil');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -104,6 +119,13 @@ export default function App() {
   useEffect(() => {
     loadEssentialData();
   }, []);
+
+  // Guard: if Supabase is configured and the user has a mock-admin-token, log them out immediately
+  useEffect(() => {
+    if (isSupabaseConfigured && adminToken === 'mock-admin-token') {
+      handleLogout();
+    }
+  }, [adminToken]);
 
   // Handle successful login checks
   const handleLoginSuccess = (token: string, profile: any) => {
@@ -216,6 +238,14 @@ export default function App() {
 
       case 'panier':
         return <CartPage setCurrentTab={setCurrentTab} />;
+
+      case 'wishlist':
+        return (
+          <Wishlist 
+            onViewProduct={handleViewProductDetails} 
+            setCurrentTab={setCurrentTab} 
+          />
+        );
 
       case 'checkout':
         return (
@@ -424,6 +454,9 @@ export default function App() {
 
         {/* COMPREHENSIVE FOOTER */}
         <Footer setCurrentTab={setCurrentTab} storeSettings={storeSettings} />
+
+        {/* FLOATING WHATSAPP CHAT INTEGRATION */}
+        <WhatsAppWidget />
 
       </div>
     </HelmetProvider>

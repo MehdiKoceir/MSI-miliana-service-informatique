@@ -24,8 +24,18 @@ export default function Catalog({
   onViewProduct
 }: CatalogProps) {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [priceRange, setPriceRange] = useState<number>(30000); // Max slide 30,000 DZD
+  const [priceMin, setPriceMin] = useState<number>(0);
+  const [priceMax, setPriceMax] = useState<number>(300000);
+  const [onlyInStock, setOnlyInStock] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<'default' | 'price-asc' | 'price-desc'>('default');
+
+  // Dynamically calculate dynamic maximum price ceiling of products
+  const maxPossiblePrice = useMemo(() => {
+    if (products.length === 0) return 300000;
+    const prices = products.map((p) => p.price_dzd);
+    const maxVal = Math.max(...prices);
+    return maxVal > 0 ? maxVal : 300000;
+  }, [products]);
 
   // Dynamically group brands from active products
   const uniqueBrands = useMemo(() => {
@@ -37,12 +47,14 @@ export default function Catalog({
   const handleResetFilters = () => {
     onCategorySelect(null);
     setSelectedBrand(null);
-    setPriceRange(30000);
+    setPriceMin(0);
+    setPriceMax(300000);
+    setOnlyInStock(false);
     setSortOrder('default');
     onSearchQueryChange('');
   };
 
-  // Filter products by search term, category, brand, and max pricing DZD
+  // Filter products by search term, category, brand, level pricing DZD and availability
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
@@ -68,8 +80,13 @@ export default function Catalog({
       result = result.filter((p) => p.brand === selectedBrand);
     }
 
-    // Max Price slider
-    result = result.filter((p) => p.price_dzd <= priceRange);
+    // Price range filters
+    result = result.filter((p) => p.price_dzd >= priceMin && p.price_dzd <= priceMax);
+
+    // Stock availability filter
+    if (onlyInStock) {
+      result = result.filter((p) => p.stock_quantity > 0);
+    }
 
     // Sorting Order
     if (sortOrder === 'price-asc') {
@@ -79,7 +96,7 @@ export default function Catalog({
     }
 
     return result;
-  }, [products, searchQuery, selectedCategoryId, selectedBrand, priceRange, sortOrder]);
+  }, [products, searchQuery, selectedCategoryId, selectedBrand, priceMin, priceMax, onlyInStock, sortOrder]);
 
   const activeCategory = categories.find((c) => c.id === selectedCategoryId);
 
@@ -169,38 +186,87 @@ export default function Catalog({
           )}
         </div>
 
-        {/* Maximum pricing filter */}
-        <div className="bg-[#111] border border-white/10 p-5 rounded-xl flex flex-col gap-3">
-          <div className="flex justify-between items-baseline border-b border-white/5 pb-2">
-            <h3 className="text-[10px] font-black uppercase text-[#D4AF37] tracking-[0.2em] font-mono">
-              Budget Max
-            </h3>
-            <span className="font-mono text-xs font-bold text-white">
-              {priceRange.toLocaleString()} DZD
-            </span>
+        {/* Price range filter */}
+        <div className="bg-[#111] border border-white/10 p-5 rounded-xl flex flex-col gap-3.5">
+          <h3 className="text-[10px] font-black uppercase text-[#D4AF37] tracking-[0.2em] font-mono border-b border-white/5 pb-2">
+            Plage de Prix (DZD)
+          </h3>
+          
+          {/* Custom Numeric inputs */}
+          <div className="grid grid-cols-2 gap-2 mt-1">
+            <div>
+              <label className="text-[9px] font-mono uppercase text-slate-500 block mb-1">Min (DZD)</label>
+              <input
+                type="number"
+                min="0"
+                max={priceMax}
+                value={priceMin}
+                onChange={(e) => setPriceMin(Math.max(0, parseInt(e.target.value) || 0))}
+                className="w-full bg-[#181818] border border-white/10 rounded-lg px-2 py-1.5 text-xs font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                id="filter-price-min"
+              />
+            </div>
+            <div>
+              <label className="text-[9px] font-mono uppercase text-slate-500 block mb-1">Max (DZD)</label>
+              <input
+                type="number"
+                min={priceMin}
+                max="1000000"
+                value={priceMax}
+                onChange={(e) => setPriceMax(Math.max(priceMin, parseInt(e.target.value) || 0))}
+                className="w-full bg-[#181818] border border-white/10 rounded-lg px-2 py-1.5 text-xs font-mono text-white focus:outline-none focus:border-[#D4AF37]"
+                id="filter-price-max"
+              />
+            </div>
           </div>
+
+          {/* Quick slider for Max Budget */}
           <div className="pt-2">
+            <div className="flex justify-between items-baseline mb-1">
+              <span className="text-[10px] text-slate-400 font-mono">Curseur Max :</span>
+              <span className="font-mono text-[11px] font-bold text-[#D4AF37]">
+                {priceMax.toLocaleString()} DZD
+              </span>
+            </div>
             <input 
               type="range" 
               min="1000" 
-              max="30000" 
-              step="500"
-              value={priceRange} 
-              onChange={(e) => setPriceRange(parseInt(e.target.value))}
+              max={maxPossiblePrice > 300000 ? maxPossiblePrice : 300000} 
+              step="1000"
+              value={priceMax > (maxPossiblePrice > 300000 ? maxPossiblePrice : 300000) ? (maxPossiblePrice > 300000 ? maxPossiblePrice : 300000) : priceMax} 
+              onChange={(e) => setPriceMax(parseInt(e.target.value))}
               className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#D4AF37]" 
+              id="filter-price-slider"
             />
-            <div className="flex justify-between text-[9px] font-mono text-slate-500 mt-2">
+            <div className="flex justify-between text-[8px] font-mono text-slate-500 mt-1">
               <span>1,000 DZD</span>
-              <span>30,000 DZD</span>
+              <span>{Math.max(300000, maxPossiblePrice).toLocaleString()} DZD</span>
             </div>
           </div>
         </div>
 
+        {/* Availability stock filter */}
+        <div className="bg-[#111] border border-white/10 p-5 rounded-xl flex flex-col gap-3">
+          <h3 className="text-[10px] font-black uppercase text-[#D4AF37] tracking-[0.2em] font-mono border-b border-white/5 pb-2">
+            Disponibilité
+          </h3>
+          <label className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-white cursor-pointer select-none py-1" id="filter-stock-label">
+            <input 
+              type="checkbox"
+              checked={onlyInStock}
+              onChange={(e) => setOnlyInStock(e.target.checked)}
+              className="rounded bg-[#161616] border-white/10 text-[#D4AF37] focus:ring-[#D4AF37] w-4 h-4 cursor-pointer accent-[#D4AF37]"
+              id="filter-stock-checkbox"
+            />
+            <span>En stock uniquement</span>
+          </label>
+        </div>
+
         {/* Display badge if filters are active */}
-        {(selectedCategoryId || selectedBrand || searchQuery || priceRange !== 30000) && (
+        {(selectedCategoryId || selectedBrand || searchQuery || priceMin !== 0 || priceMax !== 300000 || onlyInStock) && (
           <button 
             onClick={handleResetFilters}
-            className="w-full bg-[#1A1112] border border-red-950 text-red-400 text-xs py-3 rounded-xl font-bold hover:bg-red-950 hover:text-red-300 transition-colors flex items-center justify-center gap-1.5"
+            className="w-full bg-[#1A1112] border border-red-950 text-red-400 text-xs py-3 rounded-xl font-bold hover:bg-red-950 hover:text-red-300 transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]"
             id="clear-all-filters-aside"
           >
             <X className="w-4 h-4" /> Effacer et réinitialiser

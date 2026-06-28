@@ -22,7 +22,10 @@ export default function Dashboard({ adminToken, setCurrentAdminSubtab, onSelectO
             'Authorization': `Bearer ${adminToken}`
           }
         });
-        if (!res.ok) throw new Error("Échec du chargement des statistiques.");
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Échec du chargement des statistiques.");
+        }
         const data = await res.json();
         setStats(data);
       } catch (e: any) {

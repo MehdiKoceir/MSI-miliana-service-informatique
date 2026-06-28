@@ -46,7 +46,6 @@ export interface Order {
   shipping_address: string;
   status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   payment_status: 'unpaid' | 'paid' | 'failed' | 'refunded';
-  stripe_payment_intent_id?: string | null;
   subtotal_dzd: number;
   shipping_cost_dzd: number;
   total_dzd: number;

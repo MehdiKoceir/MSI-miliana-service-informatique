@@ -24,7 +24,11 @@ export default function Login({ onLoginSuccess, setCurrentTab }: LoginProps) {
     setErrorError(null);
 
     try {
+      // Security safeguard: block default credentials if Supabase config is detected
       if (email === 'admin@msi.com' && password === 'admin123') {
+        if (supabaseClient) {
+          throw new Error("L'accès de démonstration avec identifiants par défaut (admin@msi.com) est désactivé car une base de données Supabase réelle est connectée dans vos variables d'environnement. Veuillez utiliser vos identifiants administrateur Supabase.");
+        }
         handleOfflineDemoLogin();
         return;
       }
@@ -117,14 +121,28 @@ export default function Login({ onLoginSuccess, setCurrentTab }: LoginProps) {
         </form>
 
         <div className="border-t border-white/5 pt-4 text-center">
-          <span className="text-[10px] text-slate-500 font-mono block mb-2">MODE PORTFOLIO SANS CONFIGURATION :</span>
-          <button 
-            onClick={handleOfflineDemoLogin}
-            className="w-full bg-[#161616] border border-white/5 text-slate-300 hover:text-white hover:bg-white/5 py-2.5 rounded-lg text-xs font-bold transition-all"
-            id="login-simulated-btn"
-          >
-            Débloquer l'accès Démo direct (Sans DB)
-          </button>
+          {supabaseClient ? (
+            <div className="bg-emerald-950/20 border border-emerald-900 text-emerald-400 text-[10px] px-3 py-2.5 rounded-lg font-mono">
+              <span className="font-bold flex items-center justify-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                CONNEXION SUPABASE SÉCURISÉE ACTIVE
+              </span>
+              <p className="text-[9px] text-slate-400 mt-1">
+                L'accès d'invité hors-ligne est bloqué pour protéger les données réelles de votre boutique.
+              </p>
+            </div>
+          ) : (
+            <>
+              <span className="text-[10px] text-slate-500 font-mono block mb-2">MODE PORTFOLIO SANS CONFIGURATION :</span>
+              <button 
+                onClick={handleOfflineDemoLogin}
+                className="w-full bg-[#161616] border border-white/5 text-slate-300 hover:text-white hover:bg-white/5 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer"
+                id="login-simulated-btn"
+              >
+                Débloquer l'accès Démo direct (Sans DB)
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

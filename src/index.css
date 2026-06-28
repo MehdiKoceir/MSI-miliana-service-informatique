@@ -34,12 +34,289 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0F0F0F;
+  background: var(--scroll-track, #0F0F0F);
 }
 ::-webkit-scrollbar-thumb {
-  background: #2D2A1C;
+  background: var(--scroll-thumb, #2D2A1C);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #D4AF37;
 }
+
+/* CLASSIC LIGHT THEME DEFINITIONS & OVERRIDES */
+:root.light-theme {
+  --scroll-track: #F3F4F6;
+  --scroll-thumb: #D1D5DB;
+}
+
+.light-theme body,
+.light-theme {
+  background-color: #FAFAFA !important;
+  color: #1F2937 !important;
+}
+
+/* Main Outer Wrapper in App.tsx */
+.light-theme .min-h-screen.bg-black {
+  background-color: #F5F5F3 !important;
+  color: #1F2937 !important;
+}
+
+/* Text selections */
+.light-theme ::selection {
+  background-color: #D4AF37 !important;
+  color: #000000 !important;
+}
+
+/* Top promotion banner & Header */
+.light-theme header,
+.light-theme .bg-\[\#0A0A0A\]\/95 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-bottom: 1px solid #E5E7EB !important;
+}
+
+.light-theme header .bg-gradient-to-r {
+  background: linear-gradient(to right, #F9FAFB, #F3F4F6, #F9FAFB) !important;
+  border-bottom: 1px solid #E5E7EB !important;
+  color: #4B5563 !important;
+}
+
+.light-theme header .text-white,
+.light-theme header strong.text-white {
+  color: #111827 !important;
+}
+
+/* Navigation Links */
+.light-theme .text-slate-300 {
+  color: #4B5563 !important;
+}
+
+.light-theme .hover\:text-\[\#E1D29C\]:hover {
+  color: #D4AF37 !important;
+}
+
+.light-theme header .bg-\[\#161616\] {
+  background-color: #F3F4F6 !important;
+  color: #111827 !important;
+  border-color: #E5E7EB !important;
+}
+
+.light-theme header .bg-\[\#161616\]:hover {
+  background-color: #D4AF37 !important;
+  color: #000000 !important;
+}
+
+.light-theme .text-md.text-white {
+  color: #111827 !important;
+}
+
+/* Inputs & Search Boxes */
+.light-theme input,
+.light-theme select,
+.light-theme textarea,
+.light-theme .bg-\[\#121212\] {
+  background-color: #FFFFFF !important;
+  color: #111827 !important;
+  border: 1px solid #D1D5DB !important;
+}
+
+.light-theme input::placeholder {
+  color: #9CA3AF !important;
+}
+
+/* Luxurious Hero Section */
+.light-theme .bg-linear-to-b.from-\[\#0F0F0B\] {
+  background: linear-gradient(to bottom, #F9FAF6 0%, #FFFFFF 100%) !important;
+  border-bottom: 1px solid #E5E7EB !important;
+}
+
+.light-theme .bg-linear-to-b.from-\[\#0F0F0B\] h1 {
+  color: #111827 !important;
+}
+
+.light-theme .bg-linear-to-b.from-\[\#0F0F0B\] p {
+  color: #4B5563 !important;
+}
+
+.light-theme .bg-linear-to-b .text-transparent {
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  color: #9A7B1C !important; /* Slightly high contrast elegant gold for light screens */
+}
+
+/* Roadmaps & Commitments under Hero */
+.light-theme .from-\[\#111\] {
+  background: #FFFFFF !important;
+  border-color: #D4AF37 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme .from-\[\#111\] h4 {
+  color: #111827 !important;
+}
+
+.light-theme .from-\[\#111\] p {
+  color: #4B5563 !important;
+}
+
+.light-theme .from-\[\#111\] .border-l {
+  border-left-color: #E5E7EB !important;
+}
+
+/* Cards & Grid list items */
+.light-theme .bg-\[\#111111\],
+.light-theme .bg-\[\#0E0E0C\],
+.light-theme .bg-\[\#11110F\],
+.light-theme .bg-\[\#161616\],
+.light-theme .bg-black\/40 {
+  background-color: #FFFFFF !important;
+  border-color: #E5E7EB !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+}
+
+.light-theme .bg-\[\#111111\]:hover,
+.light-theme .bg-\[\#0E0E0C\]:hover {
+  border-color: #D4AF37 !important;
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Typography elements */
+.light-theme h1,
+.light-theme h2,
+.light-theme h3,
+.light-theme h4,
+.light-theme h5,
+.light-theme h6,
+.light-theme .text-white,
+.light-theme .text-slate-100,
+.light-theme .text-slate-200 {
+  color: #111827 !important;
+}
+
+.light-theme p,
+.light-theme .text-slate-300,
+.light-theme .text-slate-400 {
+  color: #4B5563 !important;
+}
+
+.light-theme .text-slate-500 {
+  color: #6B7280 !important;
+}
+
+/* Custom specific buttons (uniquely designed buttons) */
+.light-theme .bg-white\/5 {
+  background-color: #F3F4F6 !important;
+  border-color: #E5E7EB !important;
+  color: #374151 !important;
+}
+.light-theme .bg-white\/5:hover {
+  background-color: #E5E7EB !important;
+  color: #111827 !important;
+}
+
+.light-theme .bg-white\/5 .text-slate-200 {
+  color: #374151 !important;
+}
+
+.light-theme .bg-white\/5:hover .text-slate-200 {
+  color: #111827 !important;
+}
+
+/* Product Detail and Checkout pages */
+.light-theme .border-white\/10,
+.light-theme .border-white\/5 {
+  border-color: #E5E7EB !important;
+}
+
+.light-theme .bg-zinc-900,
+.light-theme .bg-zinc-950,
+.light-theme .bg-zinc-900\/50 {
+  background-color: #FFFFFF !important;
+  border-color: #E5E7EB !important;
+}
+
+.light-theme .bg-zinc-950\/50 {
+  background-color: #F9FAFB !important;
+}
+
+.light-theme .text-amber-400 {
+  color: #B45309 !important; /* Darker amber for contrast */
+}
+
+/* Custom pricing, lists & stats */
+.light-theme .bg-black\/40 {
+  background-color: #F9FAFB !important;
+}
+
+.light-theme .border-t.border-white\/5,
+.light-theme .border-b.border-white\/5 {
+  border-color: #E5E7EB !important;
+}
+
+.light-theme .divide-y.divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #E5E7EB !important;
+}
+
+/* Category grid active styles */
+.light-theme .bg-\[\#D4AF37\]\/10 {
+  background-color: rgba(212, 175, 55, 0.12) !important;
+}
+
+/* FAQ answers background */
+.light-theme .bg-black\/20 {
+  background-color: #F9FAFB !important;
+}
+
+/* Double border separator styling */
+.light-theme .border-[#D4AF37]\/25 {
+  border-color: rgba(212, 175, 55, 0.35) !important;
+}
+
+/* Admin lists table styles */
+.light-theme thead th,
+.light-theme tbody tr {
+  border-color: #E5E7EB !important;
+  background-color: #FFFFFF !important;
+}
+
+.light-theme thead th {
+  background-color: #F3F4F6 !important;
+  color: #374151 !important;
+}
+
+.light-theme tbody tr:hover {
+  background-color: #F9FAFB !important;
+}
+
+/* Quick View and popup overlays */
+.light-theme .bg-black\/60,
+.light-theme .bg-black\/80 {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Footer structure overrides */
+.light-theme footer {
+  background-color: #F3F4F6 !important;
+  border-top: 1px solid #E5E7EB !important;
+  color: #4B5563 !important;
+}
+
+.light-theme footer h3,
+.light-theme footer h4 {
+  color: #111827 !important;
+}
+
+.light-theme footer a,
+.light-theme footer p {
+  color: #4B5563 !important;
+}
+
+.light-theme footer a:hover {
+  color: #D4AF37 !important;
+}
+
+.light-theme .border-white\/10 {
+  border-color: #E5E7EB !important;
+}
+

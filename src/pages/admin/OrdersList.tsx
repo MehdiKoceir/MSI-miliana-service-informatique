@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, ChevronDown, CheckCircle, Clock, Trash2, XCircle, Loader2, RefreshCw, Eye } from 'lucide-react';
+import { ShoppingBag, ChevronDown, CheckCircle, Clock, Trash2, XCircle, Loader2, RefreshCw, Eye, FileDown } from 'lucide-react';
+import { exportOrderToPDF } from '../../lib/pdfGenerator';
 
 interface OrdersListProps {
   adminToken: string;
@@ -23,7 +24,10 @@ export default function OrdersList({ adminToken, selectedOrderId, onClearSelecte
           'Authorization': `Bearer ${adminToken}`
         }
       });
-      if (!res.ok) throw new Error("Impossible de charger le carnet de commandes.");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Impossible de charger le carnet de commandes.");
+      }
       const data = await res.json();
       setOrders(data);
     } catch (e: any) {
@@ -171,6 +175,22 @@ export default function OrdersList({ adminToken, selectedOrderId, onClearSelecte
                 {isExpanded && (
                   <div className="bg-[#151515] border-t border-white/5 p-5 flex flex-col gap-6 text-xs">
                     
+                    {/* Export Action Bar/Card */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 border border-white/10 rounded-xl p-4 gap-4">
+                      <div>
+                        <h4 className="font-bold text-[#D4AF37] text-xs font-mono uppercase tracking-wider">Facturation & Expédition</h4>
+                        <p className="text-[10px] text-slate-400 mt-0.5">Générer le bon de livraison et la facture officielle au format PDF pour ce client.</p>
+                      </div>
+                      <button
+                        onClick={() => exportOrderToPDF(ord)}
+                        className="flex items-center gap-2 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/25 text-[#D4AF37] border border-[#D4AF37]/35 hover:border-[#D4AF37] px-4 py-2 rounded-lg text-xs font-bold font-sans uppercase tracking-wide transition-all shadow-sm cursor-pointer whitespace-nowrap active:scale-[0.98]"
+                        id={`btn-export-pdf-${ord.id}`}
+                      >
+                        <FileDown className="w-4 h-4 text-[#D4AF37]" />
+                        Exporter Facture PDF
+                      </button>
+                    </div>
+
                     {/* Customer coordinates */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left pb-4 border-b border-white/5">
                       <div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { ShoppingCart, LayoutDashboard, Search, Smartphone, Award, Settings, PhoneCall, HelpCircle, ArrowRight } from 'lucide-react';
+import { ShoppingCart, LayoutDashboard, Search, Smartphone, Award, Settings, PhoneCall, HelpCircle, ArrowRight, Heart, Sun, Moon } from 'lucide-react';
 import { useCartStore } from '../store/cart';
+import { useWishlistStore } from '../store/wishlist';
+import { useThemeStore } from '../store/theme';
 
 interface NavbarProps {
   currentTab: string;
@@ -12,6 +14,8 @@ interface NavbarProps {
 export default function Navbar({ currentTab, setCurrentTab, onSearch, onCategorySelect }: NavbarProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const cartCount = useCartStore((state) => state.getCartCount());
+  const wishlistCount = useWishlistStore((state) => state.items.length);
+  const { theme, toggleTheme } = useThemeStore();
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +76,32 @@ export default function Navbar({ currentTab, setCurrentTab, onSearch, onCategory
 
           {/* Mobile Cart / Menu triggers */}
           <div className="flex items-center gap-3 md:hidden">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10 flex items-center justify-center cursor-pointer"
+              id="btn-mobile-theme-toggle"
+              title={theme === 'dark' ? 'Passer au mode clair' : 'Passer au mode sombre'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-5 w-5 text-[#D4AF37]" />
+              ) : (
+                <Moon className="h-5 w-5 text-indigo-500 fill-indigo-500" />
+              )}
+            </button>
+
+            <button 
+              onClick={() => setCurrentTab('wishlist')} 
+              className="relative p-2 text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10"
+              id="btn-mobile-wishlist"
+              title="Ma Liste d'Envies"
+            >
+              <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'text-red-500 fill-current' : 'text-slate-300'}`} />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-black animate-pulse">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
             <button 
               onClick={() => setCurrentTab('panier')} 
               className="relative p-2 text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10"
@@ -118,11 +148,39 @@ export default function Navbar({ currentTab, setCurrentTab, onSearch, onCategory
             if (onCategorySelect) onCategorySelect(null);
             setCurrentTab('boutique'); 
           }} className={`py-1.5 px-1 focus:outline-none ${isTabActive('boutique')}`} id="nav-btn-store">Boutique</button>
+          <button onClick={() => setCurrentTab('wishlist')} className={`py-1.5 px-1 focus:outline-none ${isTabActive('wishlist')}`} id="nav-btn-wishlist">Favoris</button>
           <button onClick={() => setCurrentTab('a-propos')} className={`py-1.5 px-1 focus:outline-none ${isTabActive('a-propos')}`} id="nav-btn-about">À Propos</button>
         </nav>
 
         {/* UTILITY ACTIONS CONTAINER */}
         <div className="hidden md:flex items-center gap-5">
+          <button
+            onClick={toggleTheme}
+            className="p-2.5 text-slate-300 hover:text-[#D4AF37] bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all duration-300 flex items-center justify-center cursor-pointer"
+            id="btn-desktop-theme-toggle"
+            title={theme === 'dark' ? 'Passer au mode clair' : 'Passer au mode sombre'}
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-5 w-5 text-[#D4AF37]" />
+            ) : (
+              <Moon className="h-5 w-5 text-indigo-500 fill-indigo-500" />
+            )}
+          </button>
+
+          <button 
+            onClick={() => setCurrentTab('wishlist')} 
+            className="relative p-2.5 text-slate-300 hover:text-red-500 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all duration-300"
+            id="btn-desktop-wishlist"
+            title="Ma Liste d'Envies"
+          >
+            <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'text-red-500 fill-current' : ''}`} />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black shadow-[0_0_10px_rgba(239,68,68,0.4)] animate-pulse">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
+
           <button 
             onClick={() => setCurrentTab('panier')} 
             className="relative p-2.5 text-slate-300 hover:text-[#D4AF37] bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all duration-300"

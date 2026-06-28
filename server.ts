@@ -35,11 +35,12 @@ let mockStoreSettings = {
 
 let mockCategories = [
   { id: "cat-1", name: "Téléphones & Tablettes", slug: "telephones-tablettes", display_order: 1 },
-  { id: "cat-2", name: "Claviers Gamer", slug: "claviers-gamer", display_order: 2 },
-  { id: "cat-3", name: "Souris Gamer", slug: "souris-gamer", display_order: 3 },
-  { id: "cat-4", name: "Audio & Écouteurs", slug: "audio-ecouteurs", display_order: 4 },
-  { id: "cat-5", name: "Montres Connectées", slug: "montres-connectees", display_order: 5 },
-  { id: "cat-6", name: "Accessoires", slug: "accessoires", display_order: 6 }
+  { id: "cat-7", name: "Ordinateurs & PCs", slug: "ordinateurs-pcs", display_order: 2 },
+  { id: "cat-2", name: "Claviers Gamer", slug: "claviers-gamer", display_order: 3 },
+  { id: "cat-3", name: "Souris Gamer", slug: "souris-gamer", display_order: 4 },
+  { id: "cat-4", name: "Audio & Écouteurs", slug: "audio-ecouteurs", display_order: 5 },
+  { id: "cat-5", name: "Montres Connectées", slug: "montres-connectees", display_order: 6 },
+  { id: "cat-6", name: "Accessoires", slug: "accessoires", display_order: 7 }
 ];
 
 let mockProducts = [
@@ -162,6 +163,51 @@ let mockProducts = [
     is_active: true,
     is_featured: true,
     images: [{ id: "img-8", url: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80", alt_text: "Apple iPad Pro M4", display_order: 1, is_primary: true }]
+  },
+  {
+    id: "prod-9",
+    name: "PC Portable Workstation Elite - Ryzen 9 / RTX 4070",
+    slug: "pc-portable-workstation-elite",
+    description: "La bête de course absolue pour les créateurs et les ingénieurs. Processeur AMD Ryzen 9, carte graphique NVIDIA GeForce RTX 4070 (8Go dédié), 32 Go de RAM DDR5 et 1 To SSD NVMe. Écran 16 pouces 240Hz UHD.",
+    brand: "ASUS",
+    price_dzd: 265000,
+    compare_at_price_dzd: 285000,
+    category_id: "cat-7",
+    stock_quantity: 3,
+    sku: "ASUS-ROG-G16-RTX4070",
+    is_active: true,
+    is_featured: true,
+    images: [{ id: "img-9", url: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=600&q=80", alt_text: "PC Portable Workstation Asus ROG", display_order: 1, is_primary: true }]
+  },
+  {
+    id: "prod-10",
+    name: "Unité Centrale MSI Creator Pro i9",
+    slug: "pc-bureau-creator-pro-i9",
+    description: "Ordinateur fixe de bureau haut de gamme assemblé par nos soins à Miliana. Intel Core i9 de 14ème génération, refroidissement liquide RGB, carte graphique NVIDIA RTX 4080 Super (16Go), 64 Go RAM et alimentation certifiée 850W Gold.",
+    brand: "MSI Brand",
+    price_dzd: 385000,
+    compare_at_price_dzd: null,
+    category_id: "cat-7",
+    stock_quantity: 2,
+    sku: "MSI-CREATOR-I9-DESKTOP",
+    is_active: true,
+    is_featured: true,
+    images: [{ id: "img-10", url: "https://images.unsplash.com/photo-1618424181497-157f25b6ddd5?auto=format&fit=crop&w=600&q=80", alt_text: "PC Bureau MSI Creator Pro", display_order: 1, is_primary: true }]
+  },
+  {
+    id: "prod-11",
+    name: "Apple iPhone 15 Pro Max - 256GB Titanium",
+    slug: "apple-iphone-15-pro-max-256gb",
+    description: "Le fleuron d'Apple doté d'un boîtier en titane ultra-résistant de qualité aérospatiale, de la nouvelle puce A17 Pro ultra-puissante, et d'un zoom optique 5x exclusif.",
+    brand: "Apple",
+    price_dzd: 195000,
+    compare_at_price_dzd: 215000,
+    category_id: "cat-1",
+    stock_quantity: 6,
+    sku: "APPLE-IPH15PM-256",
+    is_active: true,
+    is_featured: true,
+    images: [{ id: "img-11", url: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80", alt_text: "Apple iPhone 15 Pro Max Titan", display_order: 1, is_primary: true }]
   }
 ];
 
@@ -292,8 +338,20 @@ async function reqAdmin(req: express.Request, res: express.Response, next: expre
   }
   const token = authHeader.replace('Bearer ', '');
   
-  // Offline simulation/demo fallback is always allowed even if hasSupabase evaluates to true
+  // Offline simulation/demo fallback is ONLY allowed if there is no active Supabase configuration.
+  // This blocks anyone from bypassing admin authentication in production with standard test keys.
   if (token === 'mock-admin-token') {
+    const host = req.headers.host || '';
+    const isLocalOrPreview = 
+      host.includes('localhost') || 
+      host.includes('127.0.0.1') || 
+      host.includes('ais-dev') || 
+      host.includes('ais-pre') || 
+      host.includes('run.app');
+
+    if (hasSupabase && !isLocalOrPreview) {
+      return res.status(401).json({ error: "Accès démo non autorisé avec une base de données active." });
+    }
     return next();
   }
   
@@ -422,7 +480,7 @@ app.get(['/api/store-settings', '/api/settings'], async (req, res) => {
 });
 
 // ==========================================
-// SECURE ORDER & STRIPE CHECKOUT
+// SECURE ORDER & CHECKOUT (CASH ON DELIVERY)
 // ==========================================
 const OrderSchema = z.object({
   customerName: z.string().min(2, "Nom requis"),
@@ -629,7 +687,7 @@ app.get('/api/orders/confirmation/:id', async (req, res) => {
   }
 });
 
-// Stripe Webhook & simulations disabled - Handled automatically by Cash on Delivery flow.
+// All order statuses and calculations are handled automatically by Cash on Delivery flow.
 
 // ==========================================
 // ADMIN API ENDPOINTS (PROTECTED BY JWT MIDDLEWARE)
@@ -1036,10 +1094,9 @@ app.put('/api/admin/settings', reqAdmin, async (req, res) => {
   }
 });
 
-// Info route about config & Stripe testing capabilities
+// Info route about config & database capabilities
 app.get('/api/config', (req, res) => {
   res.json({
-    stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "pk_test_sample_key_since_no_env_configured",
     databaseType: hasSupabase ? "Supabase Postgres (Cloud DB)" : "Offline Stateful Mock (AI Studio Ready)",
     hasSupabase
   });

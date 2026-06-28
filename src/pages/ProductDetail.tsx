@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Undo2, ArrowLeft, Smartphone, Plus, Minus, KeyRound, ShieldAlert } from 'lucide-react';
+import { ShoppingCart, Undo2, ArrowLeft, Smartphone, Plus, Minus, KeyRound, ShieldAlert, Heart } from 'lucide-react';
 import { Product } from '../types/store';
 import { useCartStore } from '../store/cart';
+import { useWishlistStore } from '../store/wishlist';
 import MetadataHelper from '../components/MetadataHelper';
 
 interface ProductDetailProps {
@@ -11,6 +12,8 @@ interface ProductDetailProps {
 
 export default function ProductDetail({ product, onGoBack }: ProductDetailProps) {
   const addItem = useCartStore((state) => state.addItem);
+  const { toggleItem, hasItem } = useWishlistStore();
+  const isWishlisted = hasItem(product.id);
   const [qtyToAdd, setQtyToAdd] = useState(1);
   
   // Gallery swapper state
@@ -210,6 +213,19 @@ export default function ProductDetail({ product, onGoBack }: ProductDetailProps)
             >
               <ShoppingCart className="w-5 h-5 shrink-0" />
               {isOutOfStock ? "Matériel en rupture" : "Ajouter au panier de commande"}
+            </button>
+
+            <button 
+              onClick={() => toggleItem(product)}
+              className={`p-4 rounded-xl border transition-all hover:scale-105 cursor-pointer ${
+                isWishlisted 
+                  ? 'bg-red-950/30 border-red-900/60 text-red-500 hover:bg-red-950/50' 
+                  : 'bg-white/5 border-white/10 text-slate-300 hover:text-red-400 hover:border-red-500/25'
+              }`}
+              title={isWishlisted ? "Retirer de ma liste d'envies" : "Ajouter à ma liste d'envies"}
+              id="detail-toggle-wishlist-btn"
+            >
+              <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current text-red-500' : ''}`} />
             </button>
           </div>
         </div>

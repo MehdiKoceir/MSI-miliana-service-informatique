@@ -1,7 +1,8 @@
 import React from 'react';
-import { ShoppingCart, Eye, Tag } from 'lucide-react';
+import { ShoppingCart, Eye, Tag, Heart } from 'lucide-react';
 import { Product } from '../types/store';
 import { useCartStore } from '../store/cart';
+import { useWishlistStore } from '../store/wishlist';
 
 interface ProductCardProps {
   key?: React.Key | string;
@@ -11,6 +12,8 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onViewDetails }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
+  const { toggleItem, hasItem } = useWishlistStore();
+  const isWishlisted = hasItem(product.id);
   
   const primaryImg = product.images?.find((img) => img.is_primary) || product.images?.[0];
   const imageUrl = primaryImg?.url || "https://images.unsplash.com/photo-1531525645387-7f14be1bdbbd?auto=format&fit=crop&w=600&q=80";
@@ -26,6 +29,11 @@ export default function ProductCard({ product, onViewDetails }: ProductCardProps
     if (!isOutOfStock) {
       addItem(product, 1);
     }
+  };
+
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleItem(product);
   };
 
   return (
@@ -78,6 +86,19 @@ export default function ProductCard({ product, onViewDetails }: ProductCardProps
           >
             <Eye className="w-5 h-5" />
           </button>
+
+          <button 
+            onClick={handleToggleWishlist}
+            className={`p-2.5 rounded-full transition-all duration-200 hover:scale-110 ${
+              isWishlisted 
+                ? 'bg-red-600 text-white hover:bg-red-700' 
+                : 'bg-white text-black hover:text-red-500 hover:bg-white'
+            }`}
+            title={isWishlisted ? "Retirer des favoris" : "Ajouter aux favoris"}
+            id={`btn-favorite-${product.id}`}
+          >
+            <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+          </button>
         </div>
       </div>
 
@@ -113,19 +134,34 @@ export default function ProductCard({ product, onViewDetails }: ProductCardProps
             </span>
           </div>
 
-          <button 
-            onClick={handleAddToCart}
-            disabled={isOutOfStock}
-            className={`p-2.5 rounded-lg transition-all flex items-center justify-center ${
-              isOutOfStock 
-                ? 'bg-white/5 text-slate-600 cursor-not-allowed' 
-                : 'bg-white/5 text-[#D4AF37] border border-[#D4AF37]/20 hover:bg-[#D4AF37] hover:text-black hover:scale-105 hover:shadow-[0_0_10px_rgba(212,175,55,0.2)]'
-            }`}
-            title={isOutOfStock ? "Indisponible" : "Ajouter au Panier"}
-            id={`btn-add-cart-${product.id}`}
-          >
-            <ShoppingCart className="w-4.5 h-4.5" />
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button 
+              onClick={handleToggleWishlist}
+              className={`p-2 rounded-lg border transition-all ${
+                isWishlisted 
+                  ? 'bg-red-950/30 border-red-900/60 text-red-500 hover:bg-red-950/50 hover:scale-105' 
+                  : 'bg-white/5 border-white/10 text-slate-400 hover:text-red-400 hover:border-red-500/30 hover:scale-105'
+              }`}
+              title={isWishlisted ? "Retirer des favoris" : "Ajouter aux favoris"}
+              id={`btn-card-fav-${product.id}`}
+            >
+              <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current text-red-500' : ''}`} />
+            </button>
+
+            <button 
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+              className={`p-2.5 rounded-lg transition-all flex items-center justify-center ${
+                isOutOfStock 
+                  ? 'bg-white/5 text-slate-600 cursor-not-allowed' 
+                  : 'bg-white/5 text-[#D4AF37] border border-[#D4AF37]/20 hover:bg-[#D4AF37] hover:text-black hover:scale-105 hover:shadow-[0_0_10px_rgba(212,175,55,0.2)]'
+              }`}
+              title={isOutOfStock ? "Indisponible" : "Ajouter au Panier"}
+              id={`btn-add-cart-${product.id}`}
+            >
+              <ShoppingCart className="w-4.5 h-4.5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
