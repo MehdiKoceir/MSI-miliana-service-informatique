@@ -13,24 +13,24 @@ interface AboutProps {
 }
 
 export default function About({ storeSettings }: AboutProps) {
-  const storeName = storeSettings?.store_name || "MSI - Miliana Service Informatique";
+  const storeName = storeSettings?.store_name || "MTS - Miliana Tech Space";
   const storePhone = storeSettings?.phone || "+213 555 12 34 56";
   const storeAddress = storeSettings?.address || "Rue de l'Émir Abdelkader, Miliana, Algérie";
-  const instaUrl = storeSettings?.instagram_url || "https://instagram.com/miliana_service_informatique";
-  const fbUrl = storeSettings?.facebook_url || "https://facebook.com/miliana_service_informatique";
+  const instaUrl = storeSettings?.instagram_url || "https://instagram.com/miliana_tech_space";
+  const fbUrl = storeSettings?.facebook_url || "https://facebook.com/miliana_tech_space";
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col gap-12">
       <MetadataHelper 
         title="À Propos & Contact" 
-        description="Faites connaissance avec l'histoire, la localisation et les valeurs de Miliana Service Informatique." 
+        description="Faites connaissance avec l'histoire, la localisation et les valeurs de Miliana Tech Space." 
       />
 
       <div className="text-center max-w-2xl mx-auto">
         <span className="text-[#D4AF37] font-mono text-[10px] uppercase font-black tracking-[0.3em] block mb-2">NOTRE HISTOIRE & VALEURS</span>
-        <h1 className="text-4xl font-black italic uppercase text-white tracking-tight font-display mb-4">À propos de MSI</h1>
+        <h1 className="text-4xl font-black italic uppercase text-white tracking-tight font-display mb-4">À propos de MTS</h1>
         <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-          Fondé à Miliana, MSI (Miliana Service Informatique) est devenu la référence locale incontournable pour les passionnés de technologie, de gaming et de smartphones hauts de gamme en Algérie.
+          Fondé à Miliana, MTS (Miliana Tech Space) est devenu la référence locale incontournable pour les passionnés de technologie, de gaming et de smartphones hauts de gamme en Algérie.
         </p>
       </div>
 

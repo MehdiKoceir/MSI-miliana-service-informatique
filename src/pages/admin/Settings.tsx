@@ -26,7 +26,7 @@ export default function Settings({ adminToken, onRefreshSettings }: SettingsProp
         if (!res.ok) throw new Error("Impossible de charger les paramètres boutique.");
         const data = await res.json();
         
-        setStoreName(data.store_name || "MSI - Miliana Service Informatique");
+        setStoreName(data.store_name || "MTS - Miliana Tech Space");
         setPhone(data.phone || '');
         setAddress(data.address || '');
         setInstagramUrl(data.instagram_url || '');
@@ -117,7 +117,7 @@ export default function Settings({ adminToken, onRefreshSettings }: SettingsProp
           <input 
             type="text" 
             required
-            placeholder="MSI - Miliana Service Informatique"
+            placeholder="MTS - Miliana Tech Space"
             value={storeName}
             onChange={(e) => setStoreName(e.target.value)}
             className="bg-[#161616] border border-white/10 focus:border-[#D4AF37] rounded-lg px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"

@@ -17,7 +17,7 @@ export default function MetadataHelper({
   categoryName,
   urlPath = ""
 }: MetadataHelperProps) {
-  const finalTitle = `${title} | MSI Miliana`;
+  const finalTitle = `${title} | MTS Miliana`;
   const appUrl = (import.meta as any).env?.VITE_APP_URL || window.location.origin;
   const currentUrl = `${appUrl}${urlPath}`;
 
@@ -30,11 +30,11 @@ export default function MetadataHelper({
       "@type": "Product",
       "name": product.name,
       "image": [imageUrl],
-      "description": product.description || "Achetez au meilleur prix chez Miliana Service Informatique.",
-      "sku": product.sku || `MSI-PROD-${product.id}`,
+      "description": product.description || "Achetez au meilleur prix chez Miliana Tech Space.",
+      "sku": product.sku || `MTS-PROD-${product.id}`,
       "brand": {
         "@type": "Brand",
-        "name": product.brand || "MSI"
+        "name": product.brand || "MTS"
       },
       "offers": {
         "@type": "Offer",
@@ -50,7 +50,7 @@ export default function MetadataHelper({
     jsonLd = {
       "@context": "https://schema.org/",
       "@type": "CollectionPage",
-      "name": `${categoryName} à Miliana - MSI`,
+      "name": `${categoryName} à Miliana - MTS`,
       "description": description,
       "url": currentUrl
     };
@@ -66,7 +66,7 @@ export default function MetadataHelper({
       <meta property="og:description" content={description} />
       <meta property="og:type" content={product ? "product" : "website"} />
       <meta property="og:url" content={currentUrl} />
-      <meta property="og:site_name" content="Miliana Service Informatique" />
+      <meta property="og:site_name" content="Miliana Tech Space" />
       {product && (
         <>
           <meta property="og:image" content={product.images?.[0]?.url || "placeholder"} />

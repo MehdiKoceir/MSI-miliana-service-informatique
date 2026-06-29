@@ -25,9 +25,9 @@ export default function Login({ onLoginSuccess, setCurrentTab }: LoginProps) {
 
     try {
       // Security safeguard: block default credentials if Supabase config is detected
-      if (email === 'admin@msi.com' && password === 'admin123') {
+      if (email === 'admin@mts.com' && password === 'admin123') {
         if (supabaseClient) {
-          throw new Error("L'accès de démonstration avec identifiants par défaut (admin@msi.com) est désactivé car une base de données Supabase réelle est connectée dans vos variables d'environnement. Veuillez utiliser vos identifiants administrateur Supabase.");
+          throw new Error("L'accès de démonstration avec identifiants par défaut (admin@mts.com) est désactivé car une base de données Supabase réelle est connectée dans vos variables d'environnement. Veuillez utiliser vos identifiants administrateur Supabase.");
         }
         handleOfflineDemoLogin();
         return;
@@ -49,7 +49,7 @@ export default function Login({ onLoginSuccess, setCurrentTab }: LoginProps) {
           throw new Error("Authentification réussie mais aucune session active.");
         }
       } else {
-        throw new Error("Identifiants incorrects. Pour le mode démo, utilisez : admin@msi.com / admin123");
+        throw new Error("Identifiants incorrects. Pour le mode démo, utilisez : admin@mts.com / admin123");
       }
     } catch (err: any) {
       console.error(err);
@@ -75,7 +75,7 @@ export default function Login({ onLoginSuccess, setCurrentTab }: LoginProps) {
         <div className="text-center">
           <KeyRound className="w-10 h-10 text-[#D4AF37] mx-auto mb-3" />
           <h1 className="font-display font-black text-xl text-white uppercase tracking-wider mb-1">Accès Administrateur</h1>
-          <p className="text-[11px] text-slate-500">Panel réservé à la gestion des produits et commandes MSI Miliana.</p>
+          <p className="text-[11px] text-slate-500">Panel réservé à la gestion des produits et commandes MTS Miliana.</p>
         </div>
 
         {errorError && (
@@ -91,7 +91,7 @@ export default function Login({ onLoginSuccess, setCurrentTab }: LoginProps) {
             <input 
               type="email" 
               required
-              placeholder="admin@msi.com"
+              placeholder="admin@mts.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-[#161616] border border-white/10 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] rounded-lg px-4 py-3 text-xs text-white placeholder-slate-700 focus:outline-none"

@@ -106,7 +106,7 @@ export default function ProductCard({ product, onViewDetails }: ProductCardProps
         <div>
           <div className="flex items-center justify-between gap-1 mb-1.5">
             <span className="text-[10px] font-extrabold text-[#D4AF37] uppercase tracking-widest font-mono">
-              {product.brand || "MSI ORIGINAL"}
+              {product.brand || "MTS ORIGINAL"}
             </span>
             {product.sku && (
               <span className="text-[9px] font-mono text-slate-500 tracking-tighter">

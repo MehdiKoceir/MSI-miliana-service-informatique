@@ -93,7 +93,7 @@ export default function OrdersList({ adminToken, selectedOrderId, onClearSelecte
       <div className="flex justify-between items-center border-b border-white/5 pb-4">
         <div>
           <h1 className="text-xl font-black italic uppercase font-display text-white tracking-tight">Liste des commandes</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Carnet d'expédition Miliana Service Informatique.</p>
+          <p className="text-xs text-slate-500 mt-0.5">Carnet d'expédition Miliana Tech Space.</p>
         </div>
         <button 
           onClick={fetchOrders}
@@ -221,7 +221,7 @@ export default function OrdersList({ adminToken, selectedOrderId, onClearSelecte
                           <div key={idx} className="p-3.5 flex items-center justify-between gap-4 text-xs font-mono">
                             <div className="flex-1">
                               <h4 className="font-bold text-white font-sans text-xs">{item.products?.name || "Article supprimé"}</h4>
-                              <span className="text-[10px] text-slate-500">Marque: {item.products?.brand || 'MSI'}</span>
+                              <span className="text-[10px] text-slate-500">Marque: {item.products?.brand || 'MTS'}</span>
                             </div>
                             <div className="text-right flex items-center gap-8">
                               <span className="text-slate-400 font-bold">{item.quantity} &times; {item.price_dzd?.toLocaleString()} DZD</span>

@@ -18,7 +18,7 @@ export default function CartPage({ setCurrentTab }: CartPageProps) {
     <div className="max-w-7xl mx-auto px-6 py-12">
       <MetadataHelper 
         title="Mon Panier d'Achat" 
-        description="Consultez et ajustez vos articles sélectionnés chez Miliana Service Informatique." 
+        description="Consultez et ajustez vos articles sélectionnés chez Miliana Tech Space." 
       />
 
       <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
@@ -70,7 +70,7 @@ export default function CartPage({ setCurrentTab }: CartPageProps) {
                       <img src={imageUrl} alt={product.name} className="object-cover w-full h-full p-1" referrerPolicy="no-referrer" />
                     </div>
                     <div>
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-[#D4AF37] font-extrabold">{product.brand || "MSI Original"}</span>
+                      <span className="text-[9px] font-mono uppercase tracking-widest text-[#D4AF37] font-extrabold">{product.brand || "MTS Original"}</span>
                       <h3 className="font-bold text-sm text-white font-display line-clamp-1">{product.name}</h3>
                       <p className="font-mono text-xs text-[#D4AF37] font-semibold mt-0.5">{product.price_dzd.toLocaleString()} DZD <span className="text-[10px] text-slate-500 font-normal">/ unité</span></p>
                     </div>

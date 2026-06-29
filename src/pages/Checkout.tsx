@@ -129,7 +129,7 @@ export default function Checkout({ setCurrentTab, onSetConfirmedOrderId }: Check
     <div className="max-w-7xl mx-auto px-6 py-12">
       <MetadataHelper 
         title="Passer la commande" 
-        description="Remplissez vos coordonnées pour valider votre commande et procéder au règlement avec MSI." 
+        description="Remplissez vos coordonnées pour valider votre commande et procéder au règlement avec MTS." 
       />
 
       <div className="mb-8 border-b border-white/5 pb-4">
@@ -269,7 +269,7 @@ export default function Checkout({ setCurrentTab, onSetConfirmedOrderId }: Check
                   <span className="font-display font-black text-xs uppercase tracking-wider text-white">Mode de règlement : Paiement à la livraison (COD)</span>
                 </div>
                 <p className="text-[11px] leading-relaxed text-slate-400">
-                  Chez <strong>Miliana Service Informatique (MSI)</strong>, vous payez directement en espèces (Cash on Delivery) au moment de la livraison de votre matériel. Vous disposez de la possibilité de vérifier et inspecter l'état de votre colis avant de régler le livreur.
+                  Chez <strong>Miliana Tech Space (MTS)</strong>, vous payez directement en espèces (Cash on Delivery) au moment de la livraison de votre matériel. Vous disposez de la possibilité de vérifier et inspecter l'état de votre colis avant de régler le livreur.
                 </p>
                 <div className="border-t border-white/5 pt-3 mt-3 text-[10px] italic text-[#D4AF37]/80 leading-normal">
                   * Procédure : Une fois la commande validée, notre service client vous contactera par téléphone sur votre numéro mobile pour confirmer votre adresse et planifier le passage du livreur.

@@ -54,7 +54,7 @@ export default function Confirmation({ confirmedOrderId, setCurrentTab }: Confir
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
-      <MetadataHelper title="Confirmation de Commande" description="Votre commande a été enregistrée avec succès chez Miliana Service Informatique." />
+      <MetadataHelper title="Confirmation de Commande" description="Votre commande a été enregistrée avec succès chez Miliana Tech Space." />
 
       <div className="bg-[#111111] border border-white/10 rounded-2xl p-6 sm:p-10 flex flex-col items-center text-center gap-6 relative overflow-hidden" id="confirmation-panel">
         <div className="absolute top-0 inset-x-0 h-1.5 bg-[#D4AF37]"></div>

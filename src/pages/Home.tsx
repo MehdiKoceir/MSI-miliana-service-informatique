@@ -89,7 +89,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
         '1 To SSD NVMe Samsung Gen4 High-Speed 7000Mb/s'
       ],
       approxPrice: '210 000 DZD',
-      message: 'Bonjour MSI ! Je souhaite un devis complet pour le pack "Alpha Gaming" à environ 210,000 DZD. Pouvez-vous me proposer les pièces actuelles en stock ?'
+      message: 'Bonjour MTS ! Je souhaite un devis complet pour le pack "Alpha Gaming" à environ 210,000 DZD. Pouvez-vous me proposer les pièces actuelles en stock ?'
     },
     {
       id: 'workstation',
@@ -102,7 +102,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
         '2 To SSD NVMe WD Black Gen4 premium + Heatsink'
       ],
       approxPrice: '380 000 DZD',
-      message: 'Bonjour MSI ! Je suis créateur de contenu / professionnel et je souhaite configurer une machine de travail de type "Workstation Pro" (~380,000 DZD). Quels composants suggérez-vous ?'
+      message: 'Bonjour MTS ! Je suis créateur de contenu / professionnel et je souhaite configurer une machine de travail de type "Workstation Pro" (~380,000 DZD). Quels composants suggérez-vous ?'
     },
     {
       id: 'essential',
@@ -115,7 +115,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
         '512 Go SSD NVMe Kingston NV2 Fast Boot'
       ],
       approxPrice: '95 000 DZD',
-      message: 'Bonjour MSI ! Je cherche un PC fixe polyvalent "Office & Dev" réactif et sécurisé pour un budget d`environ 95,000 DZD. Proposez-vous un montage correspondant ?'
+      message: 'Bonjour MTS ! Je cherche un PC fixe polyvalent "Office & Dev" réactif et sécurisé pour un budget d`environ 95,000 DZD. Proposez-vous un montage correspondant ?'
     }
   ];
 
@@ -126,7 +126,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
     },
     {
       q: "Quelles garanties offrez-vous sur vos smartphones et ordinateurs ?",
-      a: "Chaque produit High-tech acheté chez Miliana Service Informatique bénéficie d'une garantie matérielle pièces et main d'œuvre de 12 à 36 mois. Notre service après-vente (SAV) est opéré directement par nos techniciens qualifiés au sein de notre atelier de Miliana."
+      a: "Chaque produit High-tech acheté chez Miliana Tech Space bénéficie d'une garantie matérielle pièces et main d'œuvre de 12 à 36 mois. Notre service après-vente (SAV) est opéré directement par nos techniciens qualifiés au sein de notre atelier de Miliana."
     },
     {
       q: "Est-il possible de personnaliser intégralement un PC fixe ?",
@@ -176,7 +176,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
     <div className="flex flex-col gap-16 pb-16">
       <MetadataHelper 
         title="Boutique Informatique & High-Tech" 
-        description="Bienvenue chez Miliana Service Informatique (MSI). Votre espace de confiance pour smartphones, ordinateurs sur-mesure, portables et matériel gaming en Algérie." 
+        description="Bienvenue chez Miliana Tech Space (MTS). Votre espace de confiance pour smartphones, ordinateurs sur-mesure, portables et matériel gaming en Algérie." 
       />
 
       {/* AUTO-CYCLING EFFECT FOR HERO SLIDES */}
@@ -286,7 +286,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
                 <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-5">
                   <div>
                     <h3 className="font-extrabold text-xs text-white uppercase font-display tracking-widest">
-                      ÉTAT DE L'ATELIER MSI
+                      ÉTAT DE L'ATELIER MTS
                     </h3>
                     <p className="text-[10px] font-mono text-slate-500">Mis à jour en temps réel</p>
                   </div>
@@ -332,7 +332,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
                       </div>
                       <div>
                         <h4 className="text-xs font-bold text-slate-300">Avis Général Algérie</h4>
-                        <p className="text-[10px] text-slate-500 font-light">Calculé sur +1 800 clients MSI</p>
+                        <p className="text-[10px] text-slate-500 font-light">Calculé sur +1 800 clients MTS</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
@@ -558,7 +558,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
                   NOTRE CHARTE QUALITÉ LOCALE
                 </span>
                 <h3 className="text-xl font-bold font-display text-white uppercase tracking-tight mb-4 border-b border-white/5 pb-3">
-                  Pourquoi monter chez MSI ?
+                  Pourquoi monter chez MTS ?
                 </h3>
 
                 <div className="flex flex-col gap-5">
@@ -600,7 +600,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
                   <Award className="w-5 h-5 shrink-0" />
                 </div>
                 <div className="text-[10px] leading-relaxed text-slate-400 font-light">
-                  <strong className="text-white font-bold">MSI Miliana Service Informatique</strong> est votre assembleur expert de référence en Algérie.
+                  <strong className="text-white font-bold">MTS Miliana Tech Space</strong> est votre assembleur expert de référence en Algérie.
                 </div>
               </div>
             </div>
@@ -694,7 +694,7 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
             TÉMOIGNAGES DE NOS CLIENTS
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 font-light">
-            Découvrez pourquoi les passionnés d'informatique et les acheteurs de smartphones font confiance à Miliana Service Informatique.
+            Découvrez pourquoi les passionnés d'informatique et les acheteurs de smartphones font confiance à Miliana Tech Space.
           </p>
         </div>
 
@@ -789,12 +789,12 @@ export default function Home({ products, categories, onViewProduct, onExploreCat
             </div>
             <div>
               <h4 className="text-xs font-extrabold text-white uppercase tracking-wider">Vous avez une autre question spécifique ou un projet ?</h4>
-              <p className="text-[11px] text-slate-400 font-light mt-0.5">Parlez instantanément à un conseiller technique de chez MSI.</p>
+              <p className="text-[11px] text-slate-400 font-light mt-0.5">Parlez instantanément à un conseiller technique de chez MTS.</p>
             </div>
           </div>
           <button
             onClick={() => {
-              const text = encodeURIComponent("Bonjour MSI ! J'ai une question spécifique à propos de vos services informatiques/pièces ou livraisons.");
+              const text = encodeURIComponent("Bonjour MTS ! J'ai une question spécifique à propos de vos services informatiques/pièces ou livraisons.");
               window.open(`https://wa.me/213555123456?text=${text}`, '_blank');
             }}
             className="bg-[#25D366] hover:bg-[#20ba56] text-white px-5 py-3 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 cursor-pointer font-mono shadow-[0_2px_10px_rgba(37,211,102,0.2)]"

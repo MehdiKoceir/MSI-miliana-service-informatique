@@ -21,16 +21,39 @@ const supabaseAdminClient = hasSupabase
     })
   : null;
 
+let isSupabaseHealthy = true;
+const useSupabase = () => {
+  return hasSupabase && supabaseAdminClient !== null && isSupabaseHealthy;
+};
+
+// Startup connection test
+if (hasSupabase && supabaseAdminClient) {
+  (async () => {
+    try {
+      const { error } = await supabaseAdminClient!.from('store_settings').select('id').limit(1);
+      if (error) {
+        console.warn("⚠️ Supabase configured but query failed. Falling back to offline stateful mock.", error);
+        isSupabaseHealthy = false;
+      } else {
+        console.log("✅ Supabase connection verification: SUCCESSFUL");
+      }
+    } catch (err) {
+      console.warn("⚠️ Supabase configured but connection failed (ENOTFOUND/network error). Falling back to offline stateful mock.", err);
+      isSupabaseHealthy = false;
+    }
+  })();
+}
+
 // ==========================================
 // IN-MEMORY FALLBACK DATABASE STATE
 // ==========================================
 let mockStoreSettings = {
   id: 1,
-  store_name: "MSI - Miliana Service Informatique",
+  store_name: "MTS - Miliana Tech Space",
   phone: "+213 555 12 34 56",
   address: "Rue de l'Émir Abdelkader, Miliana, Algérie",
-  instagram_url: "https://instagram.com/miliana_service_informatique",
-  facebook_url: "https://facebook.com/miliana_service_informatique"
+  instagram_url: "https://instagram.com/miliana_tech_space",
+  facebook_url: "https://facebook.com/miliana_tech_space"
 };
 
 let mockCategories = [
@@ -230,32 +253,32 @@ app.get(['/produits/:slug', '/categories/:slug'], async (req, res, next) => {
     const isCategory = req.originalUrl.includes('/categories/');
     const appUrl = process.env.APP_URL || 'http://localhost:3000';
     
-    let ogTitle = "MSI - Miliana Service Informatique";
+    let ogTitle = "MTS - Miliana Tech Space";
     let ogDesc = "Boutique d'informatique, téléphonie et gaming de confiance à Miliana, Algérie.";
     let ogImage = "https://images.unsplash.com/photo-1531525645387-7f14be1bdbbd?auto=format&fit=crop&w=600&q=80";
     let amount = "";
 
     try {
       if (isCategory) {
-        if (hasSupabase && supabaseAdminClient) {
-          const { data } = await supabaseAdminClient.from('categories').select('*').eq('slug', slug).single();
+        if (useSupabase()) {
+          const { data } = await supabaseAdminClient!.from('categories').select('*').eq('slug', slug).single();
           if (data) {
-            ogTitle = `${data.name} | MSI Miliana`;
+            ogTitle = `${data.name} | MTS Miliana`;
             ogDesc = `Découvrez notre collection de ${data.name} au meilleur prix.`;
           }
         } else {
           const cat = mockCategories.find(c => c.slug === slug);
           if (cat) {
-            ogTitle = `${cat.name} | MSI Miliana`;
+            ogTitle = `${cat.name} | MTS Miliana`;
             ogDesc = `Découvrez notre collection de ${cat.name} au meilleur prix en Algérie.`;
           }
         }
       } else {
         // Product
-        if (hasSupabase && supabaseAdminClient) {
-          const { data: product } = await supabaseAdminClient.from('products').select('*, product_images(*)').eq('slug', slug).single();
+        if (useSupabase()) {
+          const { data: product } = await supabaseAdminClient!.from('products').select('*, product_images(*)').eq('slug', slug).single();
           if (product) {
-            ogTitle = `${product.name} | MSI Miliana`;
+            ogTitle = `${product.name} | MTS Miliana`;
             ogDesc = product.description || ogDesc;
             amount = String(product.price_dzd);
             const primary = product.product_images?.find((img: any) => img.is_primary) || product.product_images?.[0];
@@ -264,7 +287,7 @@ app.get(['/produits/:slug', '/categories/:slug'], async (req, res, next) => {
         } else {
           const product = mockProducts.find(p => p.slug === slug);
           if (product) {
-            ogTitle = `${product.name} | MSI Miliana`;
+            ogTitle = `${product.name} | MTS Miliana`;
             ogDesc = product.description || ogDesc;
             amount = String(product.price_dzd);
             const img = product.images?.find(i => i.is_primary) || product.images?.[0];
@@ -349,13 +372,13 @@ async function reqAdmin(req: express.Request, res: express.Response, next: expre
       host.includes('ais-pre') || 
       host.includes('run.app');
 
-    if (hasSupabase && !isLocalOrPreview) {
+    if (useSupabase() && !isLocalOrPreview) {
       return res.status(401).json({ error: "Accès démo non autorisé avec une base de données active." });
     }
     return next();
   }
   
-  if (!hasSupabase || !supabaseAdminClient) {
+  if (!useSupabase()) {
     return res.status(401).json({ error: "Authentification hors-ligne invalide" });
   }
   
@@ -389,8 +412,8 @@ async function reqAdmin(req: express.Request, res: express.Response, next: expre
 // ==========================================
 app.get('/api/categories', async (req, res) => {
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data, error } = await supabaseAdminClient.from('categories').select('*').order('display_order', { ascending: true });
+    if (useSupabase()) {
+      const { data, error } = await supabaseAdminClient!.from('categories').select('*').order('display_order', { ascending: true });
       if (!error && data) {
         return res.json(data);
       }
@@ -398,6 +421,9 @@ app.get('/api/categories', async (req, res) => {
     }
     res.json(mockCategories);
   } catch (err: any) {
+    if (err?.message?.includes('fetch failed') || err?.code === 'ENOTFOUND') {
+      isSupabaseHealthy = false;
+    }
     console.log("Categories route info (using mock fallback):", err);
     res.json(mockCategories);
   }
@@ -408,8 +434,8 @@ app.get('/api/categories', async (req, res) => {
 // ==========================================
 app.get('/api/products', async (req, res) => {
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data, error } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { data, error } = await supabaseAdminClient!
         .from('products')
         .select('*, product_images(*)')
         .eq('is_active', true)
@@ -425,6 +451,9 @@ app.get('/api/products', async (req, res) => {
     }
     res.json(mockProducts);
   } catch (err: any) {
+    if (err?.message?.includes('fetch failed') || err?.code === 'ENOTFOUND') {
+      isSupabaseHealthy = false;
+    }
     console.log("Products route info (using mock fallback):", err);
     res.json(mockProducts);
   }
@@ -433,8 +462,8 @@ app.get('/api/products', async (req, res) => {
 app.get('/api/products/:slug', async (req, res) => {
   const { slug } = req.params;
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data, error } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { data, error } = await supabaseAdminClient!
         .from('products')
         .select('*, product_images(*)')
         .eq('slug', slug)
@@ -453,6 +482,9 @@ app.get('/api/products/:slug', async (req, res) => {
     if (!product) return res.status(404).json({ error: "Produit non trouvé" });
     res.json(product);
   } catch (err: any) {
+    if (err?.message?.includes('fetch failed') || err?.code === 'ENOTFOUND') {
+      isSupabaseHealthy = false;
+    }
     console.log("Product detail route info (using mock fallback):", err);
     const product = mockProducts.find(p => p.slug === slug);
     if (!product) return res.status(404).json({ error: "Produit non trouvé" });
@@ -465,8 +497,8 @@ app.get('/api/products/:slug', async (req, res) => {
 // ==========================================
 app.get(['/api/store-settings', '/api/settings'], async (req, res) => {
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data, error } = await supabaseAdminClient.from('store_settings').select('*').eq('id', 1).single();
+    if (useSupabase()) {
+      const { data, error } = await supabaseAdminClient!.from('store_settings').select('*').eq('id', 1).single();
       if (!error && data) {
         return res.json(data);
       }
@@ -474,6 +506,9 @@ app.get(['/api/store-settings', '/api/settings'], async (req, res) => {
     }
     res.json(mockStoreSettings);
   } catch (err: any) {
+    if (err?.message?.includes('fetch failed') || err?.code === 'ENOTFOUND') {
+      isSupabaseHealthy = false;
+    }
     console.log("Store settings route info (using mock fallback):", err);
     res.json(mockStoreSettings);
   }
@@ -496,6 +531,8 @@ const OrderSchema = z.object({
 });
 
 app.post('/api/orders/checkout', rateLimitOrder, async (req, res) => {
+  let calculatedSubtotal = 0;
+  const resolvedOrderItems: any[] = [];
   try {
     const check = OrderSchema.safeParse(req.body);
     if (!check.success) {
@@ -505,16 +542,14 @@ app.post('/api/orders/checkout', rateLimitOrder, async (req, res) => {
     const { customerName, customerPhone, customerEmail, wilaya, shippingAddress, notes, items } = check.data;
     
     // Server recalculation of products prices to prevent any client-side tampering
-    let calculatedSubtotal = 0;
-    const resolvedOrderItems: any[] = [];
     
     for (const item of items) {
       let product_price = 0;
       let product_name = "";
       let availableStock = 0;
       
-      if (hasSupabase && supabaseAdminClient) {
-        const { data: dbProd, error } = await supabaseAdminClient
+      if (useSupabase()) {
+        const { data: dbProd, error } = await supabaseAdminClient!
           .from('products')
           .select('*')
           .eq('id', item.productId)
@@ -556,16 +591,16 @@ app.post('/api/orders/checkout', rateLimitOrder, async (req, res) => {
     const shippingCost = 800; 
     const calculatedTotal = calculatedSubtotal + shippingCost;
     
-    // Order Number Generation Server-Side (Format: MSI-Year-Random)
+    // Order Number Generation Server-Side (Format: MTS-Year-Random)
     const year = new Date().getFullYear();
     const idCount = Math.floor(10000 + Math.random() * 90000);
-    const orderNumber = `MSI-${year}-${idCount}`;
+    const orderNumber = `MTS-${year}-${idCount}`;
     
     let dbOrderId = "";
     
-    if (hasSupabase && supabaseAdminClient) {
+    if (useSupabase()) {
       // 1. Insert Order
-      const { data: orderData, error: orderErr } = await supabaseAdminClient
+      const { data: orderData, error: orderErr } = await supabaseAdminClient!
         .from('orders')
         .insert({
           order_number: orderNumber,
@@ -599,12 +634,12 @@ app.post('/api/orders/checkout', rateLimitOrder, async (req, res) => {
         subtotal_dzd: item.subtotal_dzd
       }));
       
-      const { error: itemsErr } = await supabaseAdminClient.from('order_items').insert(formattedItems);
+      const { error: itemsErr } = await supabaseAdminClient!.from('order_items').insert(formattedItems);
       if (itemsErr) throw itemsErr;
 
       // Decrement stock in Supabase immediately for Cash on Delivery (COD)
       for (const item of formattedItems) {
-        const { data: currentProd } = await supabaseAdminClient
+        const { data: currentProd } = await supabaseAdminClient!
           .from('products')
           .select('stock_quantity')
           .eq('id', item.product_id)
@@ -612,7 +647,7 @@ app.post('/api/orders/checkout', rateLimitOrder, async (req, res) => {
           
         if (currentProd) {
           const remainingStock = Math.max(0, currentProd.stock_quantity - item.quantity);
-          await supabaseAdminClient
+          await supabaseAdminClient!
             .from('products')
             .update({ stock_quantity: remainingStock })
             .eq('id', item.product_id);
@@ -659,6 +694,47 @@ app.post('/api/orders/checkout', rateLimitOrder, async (req, res) => {
       orderId: dbOrderId 
     });
   } catch (err: any) {
+    if (err?.message?.includes('fetch failed') || err?.code === 'ENOTFOUND') {
+      isSupabaseHealthy = false;
+      try {
+        const dbOrderId = `offline-order-${Date.now()}`;
+        const newOrder = {
+          id: dbOrderId,
+          order_number: `MTS-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`,
+          customer_name: req.body.customerName,
+          customer_phone: req.body.customerPhone,
+          customer_email: req.body.customerEmail || null,
+          wilaya: req.body.wilaya,
+          shipping_address: req.body.shippingAddress,
+          status: 'pending' as any,
+          order_status: 'pending' as any,
+          payment_status: 'unpaid' as any,
+          subtotal_dzd: resolvedOrderItems.reduce((acc, itm) => acc + (itm.subtotal_dzd || 0), 0),
+          shipping_cost_dzd: 800,
+          total_dzd: resolvedOrderItems.reduce((acc, itm) => acc + (itm.subtotal_dzd || 0), 0) + 800,
+          notes: req.body.notes || null,
+          created_at: new Date().toISOString(),
+          items: resolvedOrderItems.map((itm, i) => ({ id: `itm-${i}`, ...itm }))
+        };
+
+        if (newOrder.items) {
+          for (const item of newOrder.items) {
+            const prod = mockProducts.find(p => p.id === item.product_id);
+            if (prod) {
+              prod.stock_quantity = Math.max(0, prod.stock_quantity - item.quantity);
+            }
+          }
+        }
+
+        mockOrders.unshift(newOrder);
+        return res.json({ 
+          sessionUrl: `${req.headers.origin}/checkout/confirmation?id=${dbOrderId}&success=true`, 
+          orderId: dbOrderId 
+        });
+      } catch (fallbackErr) {
+        console.error("Fallback checkout error: ", fallbackErr);
+      }
+    }
     console.error("Checkout route error: ", err);
     res.status(500).json({ error: "Échec durant le traitement de la commande." });
   }
@@ -667,11 +743,11 @@ app.post('/api/orders/checkout', rateLimitOrder, async (req, res) => {
 app.get('/api/orders/confirmation/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data: order, error: orderErr } = await supabaseAdminClient.from('orders').select('*').eq('id', id).single();
+    if (useSupabase()) {
+      const { data: order, error: orderErr } = await supabaseAdminClient!.from('orders').select('*').eq('id', id).single();
       if (orderErr) return res.status(404).json({ error: "Commande non trouvée" });
       
-      const { data: items, error: itemsErr } = await supabaseAdminClient.from('order_items').select('*').eq('order_id', id);
+      const { data: items, error: itemsErr } = await supabaseAdminClient!.from('order_items').select('*').eq('order_id', id);
       if (itemsErr) throw itemsErr;
       
       const mappedOrder = { ...order, order_status: order.order_status || order.status };
@@ -701,27 +777,27 @@ app.get('/api/admin/dashboard', reqAdmin, async (req, res) => {
     let outOfStockCount = 0;
     let recentOrders: any[] = [];
     
-    if (hasSupabase && supabaseAdminClient) {
+    if (useSupabase()) {
       // 1. Total paid revenue
-      const { data: paidOrders } = await supabaseAdminClient
+      const { data: paidOrders } = await supabaseAdminClient!
         .from('orders')
         .select('total_dzd')
         .eq('payment_status', 'paid');
       totalRevenue = paidOrders?.reduce((acc, curr) => acc + curr.total_dzd, 0) || 0;
       
       // 2. Orders count
-      const { count } = await supabaseAdminClient.from('orders').select('*', { count: 'exact', head: true });
+      const { count } = await supabaseAdminClient!.from('orders').select('*', { count: 'exact', head: true });
       ordersCount = count || 0;
       
       // 3. Out of stock products
-      const { count: outCount } = await supabaseAdminClient
+      const { count: outCount } = await supabaseAdminClient!
         .from('products')
         .select('*', { count: 'exact', head: true })
         .lte('stock_quantity', 0);
       outOfStockCount = outCount || 0;
       
       // 4. Recent orders list
-      const { data: recents } = await supabaseAdminClient
+      const { data: recents } = await supabaseAdminClient!
         .from('orders')
         .select('*')
         .order('created_at', { ascending: false })
@@ -754,6 +830,31 @@ app.get('/api/admin/dashboard', reqAdmin, async (req, res) => {
       salesOverTime
     });
   } catch (err: any) {
+    if (err?.message?.includes('fetch failed') || err?.code === 'ENOTFOUND') {
+      isSupabaseHealthy = false;
+      try {
+        const paidOnly = mockOrders.filter(o => o.payment_status === 'paid');
+        const totalRevenue = paidOnly.reduce((sum, o) => sum + o.total_dzd, 0);
+        const salesOverTime = [
+          { name: "Lun", total: Math.round(totalRevenue * 0.1) },
+          { name: "Mar", total: Math.round(totalRevenue * 0.15) },
+          { name: "Mer", total: Math.round(totalRevenue * 0.1) },
+          { name: "Jeu", total: Math.round(totalRevenue * 0.2) },
+          { name: "Ven", total: Math.round(totalRevenue * 0.12) },
+          { name: "Sam", total: Math.round(totalRevenue * 0.18) },
+          { name: "Dim", total: Math.round(totalRevenue * 0.15) },
+        ];
+        return res.json({
+          totalRevenue,
+          ordersCount: mockOrders.length,
+          outOfStockCount: mockProducts.filter(p => p.stock_quantity <= 0).length,
+          recentOrders: mockOrders.slice(0, 5),
+          salesOverTime
+        });
+      } catch (fallbackErr) {
+        console.error("Fallback dashboard error: ", fallbackErr);
+      }
+    }
     res.status(500).json({ error: err.message });
   }
 });
@@ -782,8 +883,8 @@ app.post('/api/admin/products', reqAdmin, async (req, res) => {
   const prod = parsed.data;
 
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data: product, error: prodErr } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { data: product, error: prodErr } = await supabaseAdminClient!
         .from('products')
         .insert({
           name: prod.name,
@@ -862,8 +963,8 @@ app.put('/api/admin/products/:id', reqAdmin, async (req, res) => {
   const p = parsed.data;
 
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { error: prodErr } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { error: prodErr } = await supabaseAdminClient!
         .from('products')
         .update({
           name: p.name,
@@ -931,8 +1032,8 @@ app.put('/api/admin/products/:id', reqAdmin, async (req, res) => {
 app.delete('/api/admin/products/:id', reqAdmin, async (req, res) => {
   const { id } = req.params;
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { error } = await supabaseAdminClient.from('products').delete().eq('id', id);
+    if (useSupabase()) {
+      const { error } = await supabaseAdminClient!.from('products').delete().eq('id', id);
       if (error) throw error;
       return res.json({ success: true });
     }
@@ -952,8 +1053,8 @@ app.delete('/api/admin/products/:id', reqAdmin, async (req, res) => {
 app.post('/api/admin/categories', reqAdmin, async (req, res) => {
   const { name, slug, display_order } = req.body;
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data, error } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { data, error } = await supabaseAdminClient!
         .from('categories')
         .insert({ name, slug, display_order: parseInt(display_order || '0') })
         .select('*')
@@ -973,8 +1074,8 @@ app.post('/api/admin/categories', reqAdmin, async (req, res) => {
 app.delete('/api/admin/categories/:id', reqAdmin, async (req, res) => {
   const { id } = req.params;
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { error } = await supabaseAdminClient.from('categories').delete().eq('id', id);
+    if (useSupabase()) {
+      const { error } = await supabaseAdminClient!.from('categories').delete().eq('id', id);
       if (error) throw error;
       return res.json({ success: true });
     }
@@ -988,8 +1089,8 @@ app.delete('/api/admin/categories/:id', reqAdmin, async (req, res) => {
 // Admin Orders list
 app.get('/api/admin/orders', reqAdmin, async (req, res) => {
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { data, error } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { data, error } = await supabaseAdminClient!
         .from('orders')
         .select('*')
         .order('created_at', { ascending: false });
@@ -1008,8 +1109,8 @@ app.put('/api/admin/orders/:id/status', reqAdmin, async (req, res) => {
   const { id } = req.params;
   const { status, payment_status } = req.body;
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { error } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { error } = await supabaseAdminClient!
         .from('orders')
         .update({ 
           status: status || undefined, 
@@ -1044,8 +1145,8 @@ app.put('/api/admin/orders/:id/payment', reqAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body; // 'paid' or 'pending'
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { error } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { error } = await supabaseAdminClient!
         .from('orders')
         .update({ payment_status: status, updated_at: new Date().toISOString() })
         .eq('id', id);
@@ -1068,8 +1169,8 @@ app.put('/api/admin/orders/:id/payment', reqAdmin, async (req, res) => {
 app.put('/api/admin/settings', reqAdmin, async (req, res) => {
   const { store_name, phone, address, instagram_url, facebook_url } = req.body;
   try {
-    if (hasSupabase && supabaseAdminClient) {
-      const { error } = await supabaseAdminClient
+    if (useSupabase()) {
+      const { error } = await supabaseAdminClient!
         .from('store_settings')
         .update({ store_name, phone, address, instagram_url, facebook_url })
         .eq('id', 1);
@@ -1097,8 +1198,8 @@ app.put('/api/admin/settings', reqAdmin, async (req, res) => {
 // Info route about config & database capabilities
 app.get('/api/config', (req, res) => {
   res.json({
-    databaseType: hasSupabase ? "Supabase Postgres (Cloud DB)" : "Offline Stateful Mock (AI Studio Ready)",
-    hasSupabase
+    databaseType: useSupabase() ? "Supabase Postgres (Cloud DB)" : "Offline Stateful Mock (AI Studio Ready)",
+    hasSupabase: useSupabase()
   });
 });
 

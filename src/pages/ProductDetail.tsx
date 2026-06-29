@@ -66,7 +66,7 @@ export default function ProductDetail({ product, onGoBack }: ProductDetailProps)
       */}
       <MetadataHelper 
         title={product.name} 
-        description={product.description || "Miliana Service Informatique - Matériels de qualité."} 
+        description={product.description || "Miliana Tech Space - Matériels de qualité."} 
         product={product}
         urlPath={`/produits/${product.slug}`}
       />
@@ -125,7 +125,7 @@ export default function ProductDetail({ product, onGoBack }: ProductDetailProps)
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4 border-b border-white/5 pb-4">
               <div>
                 <span className="bg-[#1C180E] border border-[#D4AF37]/35 text-[#D4AF37] px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest font-mono select-none">
-                  Marque : {product.brand || "MSI Officiel"}
+                  Marque : {product.brand || "MTS Officiel"}
                 </span>
               </div>
               <span className="text-xs font-mono text-slate-500">
@@ -151,7 +151,7 @@ export default function ProductDetail({ product, onGoBack }: ProductDetailProps)
 
             {/* Short specs descriptor */}
             <p className="text-sm text-slate-400 leading-relaxed mb-6 whitespace-pre-wrap">
-              {product.description || "Aucun descriptif pour cet article de haute technologie. Contactez l'équipe MSI pour plus d'informations."}
+              {product.description || "Aucun descriptif pour cet article de haute technologie. Contactez l'équipe MTS pour plus d'informations."}
             </p>
 
             {/* Display status details */}

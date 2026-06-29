@@ -39,7 +39,7 @@ export const useWishlistStore = create<WishlistState>()(
       clearWishlist: () => set({ items: [] }),
     }),
     {
-      name: 'msi-wishlist-storage', // name of the item in storage (must be unique)
+      name: 'mts-wishlist-storage', // name of the item in storage (must be unique)
     }
   )
 );

@@ -63,9 +63,9 @@ export default function App() {
   
   // ADMIN PANEL NAVIGATION TABS
   const [currentAdminSubtab, setCurrentAdminSubtab] = useState<string>('stats');
-  const [adminToken, setAdminToken] = useState<string | null>(() => localStorage.getItem('msi_admin_token'));
+  const [adminToken, setAdminToken] = useState<string | null>(() => localStorage.getItem('mts_admin_token'));
   const [adminProfile, setAdminProfile] = useState<any>(() => {
-    const saved = localStorage.getItem('msi_admin_user');
+    const saved = localStorage.getItem('mts_admin_user');
     return saved ? JSON.parse(saved) : null;
   });
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -77,7 +77,7 @@ export default function App() {
   const [storeSettings, setStoreSettings] = useState<StoreSettings | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [confirmedOrderId, setConfirmedOrderId] = useState<string | null>(() => localStorage.getItem('msi_last_order'));
+  const [confirmedOrderId, setConfirmedOrderId] = useState<string | null>(() => localStorage.getItem('mts_last_order'));
 
   // LOADING STATES
   const [loadingData, setLoadingData] = useState<boolean>(true);
@@ -131,16 +131,16 @@ export default function App() {
   const handleLoginSuccess = (token: string, profile: any) => {
     setAdminToken(token);
     setAdminProfile(profile);
-    localStorage.setItem('msi_admin_token', token);
-    localStorage.setItem('msi_admin_user', JSON.stringify(profile));
+    localStorage.setItem('mts_admin_token', token);
+    localStorage.setItem('mts_admin_user', JSON.stringify(profile));
     setCurrentAdminSubtab('stats');
   };
 
   const handleLogout = () => {
     setAdminToken(null);
     setAdminProfile(null);
-    localStorage.removeItem('msi_admin_token');
-    localStorage.removeItem('msi_admin_user');
+    localStorage.removeItem('mts_admin_token');
+    localStorage.removeItem('mts_admin_user');
   };
 
   // Helper selectors redirection
@@ -159,7 +159,7 @@ export default function App() {
 
   const handleSetConfirmedOrderId = (id: string) => {
     setConfirmedOrderId(id);
-    localStorage.setItem('msi_last_order', id);
+    localStorage.setItem('mts_last_order', id);
     setCurrentTab('confirmation');
   };
 
@@ -175,7 +175,7 @@ export default function App() {
       return (
         <div className="py-32 flex flex-col items-center justify-center gap-4 text-slate-400">
           <Loader2 className="w-10 h-10 animate-spin text-[#D4AF37]" />
-          <p className="text-xs font-mono font-bold uppercase tracking-widest">Initialisation de l'infrastructure MSI...</p>
+          <p className="text-xs font-mono font-bold uppercase tracking-widest">Initialisation de l'infrastructure MTS...</p>
         </div>
       );
     }

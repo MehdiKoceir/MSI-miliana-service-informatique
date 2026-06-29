@@ -3,18 +3,18 @@ import { MessageSquare, Send, X, ShieldAlert, CheckCircle, Flame } from 'lucide-
 
 export default function WhatsAppWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const msiPhoneNumber = '213555123456'; // Official simulated Algerian number
+  const mtsPhoneNumber = '213555123456'; // Official simulated Algerian number
 
   const contactOptions = [
     {
       title: '🖥️ Configuration PC Sur-Mesure',
       desc: 'Obtenir un devis personnalisé de montage PC.',
-      template: 'Bonjour MSI ! Je souhaite obtenir un devis personnalisé pour un PC sur-mesure assemblé par vos soins. Voici mes besoins :'
+      template: 'Bonjour MTS ! Je souhaite obtenir un devis personnalisé pour un PC sur-mesure assemblé par vos soins. Voici mes besoins :'
     },
     {
       title: '📱 Smartphones & Tablettes',
       desc: 'Disponibilité, prix et coloris en stock.',
-      template: 'Bonjour MSI ! Quels sont les derniers smartphones disponibles en boutique à Miliana avec garantie ?'
+      template: 'Bonjour MTS ! Quels sont les derniers smartphones disponibles en boutique à Miliana avec garantie ?'
     },
     {
       title: '🔌 Périphériques & Accessoires',
@@ -25,7 +25,7 @@ export default function WhatsAppWidget() {
 
   const handleSendMessage = (text: string) => {
     const encodedText = encodeURIComponent(text);
-    const whatsappUrl = `https://wa.me/${msiPhoneNumber}?text=${encodedText}`;
+    const whatsappUrl = `https://wa.me/${mtsPhoneNumber}?text=${encodedText}`;
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     setIsOpen(false);
   };
@@ -65,7 +65,7 @@ export default function WhatsAppWidget() {
                 <span className="text-xl">🟢</span>
               </div>
               <div>
-                <h4 className="font-bold text-sm text-white font-display">MSI Miliana Support</h4>
+                <h4 className="font-bold text-sm text-white font-display">MTS Miliana Support</h4>
                 <p className="text-[10px] font-mono text-slate-400">Réponse rapide via WhatsApp</p>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function WhatsAppWidget() {
 
           {/* Footer */}
           <div className="p-3 bg-[#0B0B0B] text-center border-t border-white/5 text-[9px] text-slate-500 font-mono tracking-wider">
-            ⚡ MILIANA SERVICE INFORMATIQUE • DISPONIBLE 7J/7
+            ⚡ MILIANA TECH SPACE • DISPONIBLE 7J/7
           </div>
         </div>
       )}

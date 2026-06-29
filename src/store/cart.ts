@@ -70,7 +70,7 @@ export const useCartStore = create<CartState>()(
       },
     }),
     {
-      name: 'msi-cart-storage', // name of the item in storage (must be unique)
+      name: 'mts-cart-storage', // name of the item in storage (must be unique)
     }
   )
 );

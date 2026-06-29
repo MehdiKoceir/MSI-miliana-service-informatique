@@ -62,14 +62,14 @@ export default function Navbar({ currentTab, setCurrentTab, onSearch, onCategory
             id="btn-logo-home"
           >
             <div className="bg-[#161616] border-2 border-[#D4AF37] text-white font-black px-3.5 py-1 text-2xl tracking-tighter italic select-none group-hover:bg-[#D4AF37] group-hover:text-black transition-all rounded shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-              MSI
+              MTS
             </div>
             <div>
               <div className="text-md font-extrabold tracking-wider leading-none text-white font-display group-hover:text-[#D4AF37] transition-colors">
-                MILIANA SERVICE
+                MILIANA TECH
               </div>
               <div className="text-[10px] font-bold tracking-[0.25em] text-[#D4AF37] uppercase leading-none font-mono mt-0.5">
-                INFORMATIQUE
+                SPACE
               </div>
             </div>
           </button>

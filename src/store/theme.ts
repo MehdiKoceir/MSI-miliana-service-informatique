@@ -40,7 +40,7 @@ export const useThemeStore = create<ThemeState>()(
       }
     }),
     {
-      name: 'msi-theme-storage',
+      name: 'mts-theme-storage',
     }
   )
 );

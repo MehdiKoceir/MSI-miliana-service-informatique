@@ -85,14 +85,14 @@ export function exportOrderToPDF(ord: any) {
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(textDark[0], textDark[1], textDark[2]);
-  doc.text('Miliana Service Informatique', 15, currentY + 5);
+  doc.text('Miliana Tech Space', 15, currentY + 5);
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8.5);
   doc.setTextColor(textMuted[0], textMuted[1], textMuted[2]);
   doc.text('Miliana, Aïn Defla, Algérie', 15, currentY + 9);
   doc.text('Tél : +213 (0) 550 00 00 00', 15, currentY + 13);
-  doc.text('Email : contact@miliana-service.com', 15, currentY + 17);
+  doc.text('Email : contact@mts-miliana.com', 15, currentY + 17);
 
   // Right: Client Info
   doc.setFont('Helvetica', 'bold');
@@ -167,7 +167,7 @@ export function exportOrderToPDF(ord: any) {
     const wrappedName = doc.splitTextToSize(prodName, 72);
     doc.text(wrappedName[0] || '', 28, currentY + 5.5);
 
-    doc.text(item.products?.brand || 'MSI', 105, currentY + 5.5);
+    doc.text(item.products?.brand || 'MTS', 105, currentY + 5.5);
     doc.text(item.quantity?.toString() || '1', 132, currentY + 5.5);
     
     const unitPrice = item.price_dzd || 0;
@@ -274,7 +274,7 @@ export function exportOrderToPDF(ord: any) {
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(8);
   doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
-  doc.text('Miliana Service Informatique - Vous servir est notre devoir !', 15, footerY);
+  doc.text('Miliana Tech Space - Vous servir est notre devoir !', 15, footerY);
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(7);
@@ -282,6 +282,6 @@ export function exportOrderToPDF(ord: any) {
   doc.text('Document généré électroniquement - Valable pour facturation et livraison.', pageWidth - 105, footerY);
 
   // Save PDF
-  const filename = `MSI_Facture_${ord.order_number || ord.id?.substring(0,8) || 'CMD'}.pdf`;
+  const filename = `MTS_Facture_${ord.order_number || ord.id?.substring(0,8) || 'CMD'}.pdf`;
   doc.save(filename);
 }

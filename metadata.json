@@ -1,6 +1,6 @@
 {
-  "name": "MSI - Miliana Service Informatique",
-  "description": "Site vitrine et e-commerce complet pour le magasin d'informatique, de téléphonie et de gaming MSI (Miliana Service Informatique) en Algérie.",
+  "name": "MTS - Miliana Tech Space",
+  "description": "Site vitrine et e-commerce complet pour le magasin d'informatique, de téléphonie et de gaming MTS (Miliana Tech Space) en Algérie.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

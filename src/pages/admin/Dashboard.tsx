@@ -63,7 +63,7 @@ export default function Dashboard({ adminToken, setCurrentAdminSubtab, onSelectO
         <h1 className="text-2xl font-black italic uppercase text-white font-display tracking-tight flex items-center gap-2">
           Vue d'ensemble du magasin
         </h1>
-        <p className="text-xs text-slate-500 mt-1">Données et statistiques d'activité de Miliana Service Informatique.</p>
+        <p className="text-xs text-slate-500 mt-1">Données et statistiques d'activité de Miliana Tech Space.</p>
       </div>
 
       {/* METRIC CARD CELLS */}

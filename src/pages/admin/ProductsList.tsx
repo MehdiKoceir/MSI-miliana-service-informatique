@@ -166,7 +166,7 @@ export default function ProductsList({ adminToken, onEditProduct, onCreateNew }:
                         <img src={primaryImage} alt="" className="object-cover w-full h-full p-0.5" referrerPolicy="no-referrer" />
                       </div>
                       <div>
-                        <span className="text-[10px] text-[#D4AF37] font-mono uppercase tracking-widest font-black inline-block">{product.brand || "MSI"}</span>
+                        <span className="text-[10px] text-[#D4AF37] font-mono uppercase tracking-widest font-black inline-block">{product.brand || "MTS"}</span>
                         <h4 className="font-bold text-white text-xs leading-none mt-0.5">{product.name}</h4>
                       </div>
                     </td>

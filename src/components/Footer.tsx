@@ -14,11 +14,11 @@ interface FooterProps {
 }
 
 export default function Footer({ setCurrentTab, storeSettings }: FooterProps) {
-  const storeName = storeSettings?.store_name || "MSI - Miliana Service Informatique";
+  const storeName = storeSettings?.store_name || "MTS - Miliana Tech Space";
   const storePhone = storeSettings?.phone || "+213 555 12 34 56";
   const storeAddress = storeSettings?.address || "Rue de l'Émir Abdelkader, Miliana, Algérie";
-  const instaUrl = storeSettings?.instagram_url || "https://instagram.com/miliana_service_informatique";
-  const fbUrl = storeSettings?.facebook_url || "https://facebook.com/miliana_service_informatique";
+  const instaUrl = storeSettings?.instagram_url || "https://instagram.com/miliana_tech_space";
+  const fbUrl = storeSettings?.facebook_url || "https://facebook.com/miliana_tech_space";
 
   return (
     <footer className="bg-[#050505] border-t border-white/10 text-slate-400 font-sans mt-auto">
@@ -54,10 +54,10 @@ export default function Footer({ setCurrentTab, storeSettings }: FooterProps) {
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-[#12110D] border border-[#D4AF37] text-[#D4AF37] font-black px-2 pb-0.5 text-xl tracking-tighter italic rounded">
-              MSI
+              MTS
             </div>
             <span className="font-display font-black text-sm uppercase tracking-widest text-white leading-none">
-              Miliana Service Informatique
+              Miliana Tech Space
             </span>
           </div>
           <p className="text-xs leading-relaxed text-slate-500 max-w-sm mb-6">
@@ -125,7 +125,7 @@ export default function Footer({ setCurrentTab, storeSettings }: FooterProps) {
             </li>
             <li className="flex items-center gap-2.5 text-slate-500">
               <Mail className="w-4 h-4 text-[#D4AF37]" />
-              <span>contact@msi-miliana.com</span>
+              <span>contact@mts-miliana.com</span>
             </li>
           </ul>
         </div>
@@ -133,7 +133,7 @@ export default function Footer({ setCurrentTab, storeSettings }: FooterProps) {
 
       <div className="border-t border-white/5 bg-[#030303] py-6 px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center text-[10px] text-slate-600 font-mono tracking-wider gap-3">
-          <span>&copy; {new Date().getFullYear()} MILIANA SERVICE INFORMATIQUE (MSI). TOUS DROITS RÉSERVÉS.</span>
+          <span>&copy; {new Date().getFullYear()} MILIANA TECH SPACE (MTS). TOUS DROITS RÉSERVÉS.</span>
           <span>Coded in high-contrast Black & Gold Theme. Miliana, Algérie.</span>
         </div>
       </div>

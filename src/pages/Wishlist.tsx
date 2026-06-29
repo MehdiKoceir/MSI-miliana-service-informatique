@@ -139,7 +139,7 @@ export default function Wishlist({ onViewProduct, setCurrentTab }: WishlistProps
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
                     <span className="text-[10px] font-extrabold text-[#D4AF37] uppercase tracking-widest font-mono">
-                      {product.brand || "MSI BRAND"}
+                      {product.brand || "MTS BRAND"}
                     </span>
                     <h4 className="font-bold text-sm text-slate-200 mt-1 group-hover:text-white transition-colors leading-tight font-display line-clamp-1">
                       {product.name}
